@@ -25,7 +25,7 @@ export const PokemonCard = ({ pokemonUrl }) => {
       }`}
     >
       <header
-        className={`h-[80px] relative mb-8 ${
+        className={`h-[80px] relative mb-8 bg-slate-600 ${
           bgStylePokemonType[pokemonInfo?.types[0]]
         }`}
       >
