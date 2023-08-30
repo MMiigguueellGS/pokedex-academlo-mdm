@@ -59,3 +59,7 @@ const formatTypes = (types) =>{
 export const joinPokemonTypes = (types = []) => {
     return types.slice(0, 2).join(" / ")
   }
+
+export const randomIdPokemons = () => {
+    return Math.floor(Math.random() * 20);
+}
