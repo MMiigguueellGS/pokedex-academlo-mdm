@@ -1,32 +1,88 @@
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { getPokemonsById } from "../services/pokemons"
-import { StatBarList } from "../components/pokemonDetail/StatBarList"
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import EvolutionPokemon from "../components/pokemonDetail/EvolutionPokemon";
+import { StatBarList } from "../components/pokemonDetail/StatBarList";
+import { getPokemonsById } from "../services/pokemons";
+import { bgStylePokemonType } from "../shared/pokemon";
 
 export const PokemonDetail = () => {
-  const [pokemonData, setPokemonData] = useState(null)
+  const [pokemonData, setPokemonData] = useState(null);
 
-  const { pokemonId } = useParams()
-  
-  useEffect(()=> {
+  const { pokemonId } = useParams();
+
+  useEffect(() => {
     getPokemonsById(pokemonId)
       .then((data) => setPokemonData(data))
       .catch((err) => console.log(err));
-  }, [])
+  }, []);
 
   return (
-    <main className="flex justify-center items-center">
-
-      <article className="w-[min(100%,_400px)]">
-        <header>
-          <img src={pokemonData?.image} alt="" />
+    <main className=" grid gap-8   max-w-[1190px] mx-auto p-2 py-28">
+      <article className="">
+        <header
+          className={` relative h-[105px] ${
+            bgStylePokemonType[pokemonData?.types[0]]
+          }`}
+        >
+          <img
+            className="h-[200%] absolute left-1/2 -translate-x-1/2 bottom-0"
+            src={pokemonData?.image}
+            alt=""
+          />
         </header>
-        <section>
-          <span>#{pokemonData?.id}</span>
-          <StatBarList stats={pokemonData?.stats}/>
+
+        <section className="sm:px-24">
+          <section className="text-center ">
+            {/*  seccion del Id y el nombre */}
+            <div>
+              <span className="text-3xl font-bold">#{pokemonData?.id}</span>
+              <h2 className="capitalize text-5xl font-bold ">{pokemonData?.name}</h2>
+            </div>
+
+            {/*  seccion del peso y la altura*/}
+            <div className="flex justify-center gap-8 my-5">
+              <div>
+                <h4 className="text-xl font-semibold">Peso</h4>
+                <span className="text-xl font-bold">{pokemonData?.weight}</span>
+              </div>
+              <div>
+                <h4 className="text-xl font-semibold">Altura</h4>
+                <span className="text-xl font-bold">{pokemonData?.height}</span>
+              </div>
+            </div>
+
+            {/*  seccion de los tipos y habilidades*/}
+            <div className="grid sm:grid-cols-2 gap-4 justify-center">
+              {/*  seccion de los tipos*/}
+              <div className="grid grid-cols-2 gap-3">
+                <h2 className="text-3xl font-bold col-span-2 p-5 py-3">Type</h2>
+                {pokemonData?.types.map((type) => (
+                  <span key={type} className="px-5 text-xl">
+                    {type}
+                  </span>
+                ))}
+              </div>
+
+              {/*  seccion de las habilidades*/}
+              <div>
+                <div className="grid grid-cols-2 gap-3">
+                  <h2 className=" text-3xl font-bold te col-span-2  p-5 py-3">
+                    Habilies
+                  </h2>
+                  {pokemonData?.abilities.map((abilitie) => (
+                    <span key={abilitie} className="px-5 text-xl">
+                      {abilitie}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+          <StatBarList stats={pokemonData?.stats} />
+          {/* seccion donde agregare las evoluciones */}
         </section>
       </article>
-
+      <EvolutionPokemon pokemonId={pokemonId} pokemonData={pokemonData} />
     </main>
-  )
-}
+  );
+};
