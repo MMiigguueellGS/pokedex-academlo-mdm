@@ -2,9 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { FooterPokeball } from "../components/layout/FooterPokeball";
 import { loginTrainer } from "../store/slices/trainer.slice";
 import { useNavigate } from "react-router-dom";
+import { getPokemonsById, joinPokemonTypes, randomIdPokemons } from "../services/pokemons";
+import { useEffect, useState } from "react";
+import { StatList } from "../components/pokedex/StatList";
+import { bgStylePokemonType, borderStylePokemonType, nameStylePokemon } from "../shared/pokemon";
 
 
 export const Home = () => {
+  const [homeIdPokemons, setHomeIdPokemons] = useState(null)
   const dispach = useDispatch()
   const navigate = useNavigate()
   //const trainer = useSelector(store => store.trainer)
@@ -17,10 +22,16 @@ export const Home = () => {
     navigate("/pokedex")
   };
 
+  useEffect(() => {
+    getPokemonsById(randomIdPokemons())
+      .then((data) => setHomeIdPokemons(data))
+      .catch((err) => console.log(err));
+  }, [])
+
   return (
     <main className="min-h-screen grid grid-rows-[1fr_auto] ">
       
-      {/* Card home
+       {/* Card home */}
       <section className={`m-auto w-[220px] text-center capitalize border-[5px] rounded-md ${
         borderStylePokemonType[homeIdPokemons?.types[0]]
       }`}>
@@ -44,7 +55,7 @@ export const Home = () => {
         <hr />
         <StatList stats={homeIdPokemons?.stats} />
       </section>
-      </section> */}
+      </section> 
 
 
       <section className="flex flex-col justify-center items-center mx-2">
